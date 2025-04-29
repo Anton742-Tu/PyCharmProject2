@@ -54,11 +54,3 @@ def test_get_date():
     assert (
         get_date("не дата") == "Ошибка: Некорректный формат даты. Ожидается 'ГГГГ-ММ-ДДTЧЧ:ММ:СС'."
     )  # Неправильный ввод
-
-
-if __name__ == "__main__":
-    test_card_masking()
-    test_account_masking()
-    test_mask_account_card()
-    test_get_date()
-    print("Все тесты прошли успешно!")
