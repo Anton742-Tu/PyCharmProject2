@@ -11,7 +11,7 @@ CARD_NUMBER_LENGTHS: Dict[str, Union[int, List[int]]] = {
     "mir": 16,
 }
 
-# Словарь поддерживаемых типов (регистронезависимо)
+# Словарь поддерживаемых типов (регистр-независимо)
 SUPPORTED_TYPES: Dict[str, str] = {
     # Карты (русский + английский)
     "карта": "card",
@@ -36,12 +36,15 @@ SUPPORTED_TYPES: Dict[str, str] = {
 def mask_account_card(data: str) -> str:
     """
     Маскирует номер карты или счёта в переданной строке.
+    - American Express (15 Цифр): XXXX XXXXXX XXXXX
+    - Другие карты (16 цифр): XXXX XX** **** XXXX
+    - Счета: **XXXX
     Возвращает маскированную строку или сообщение об ошибке.
     """
     if not data:
         return "Ошибка: Пустой ввод."
 
-    # Разделяем тип и номер (регистронезависимо)
+    # Разделяем тип и номер (регистр-независимо)
     parts = data.strip().split()
     if len(parts) < 2:
         return "Ошибка: Неверный формат. Ожидается '[Тип] [Номер]'."
@@ -68,8 +71,13 @@ def mask_account_card(data: str) -> str:
         if len(number) not in required_lengths:
             return f"Ошибка: Номер {normalized_type} должен содержать {required_lengths} цифр."
 
-        # Форматируем номер (первые 6 и последние 4 цифры)
-        masked_number = f"{number[:4]} {number[4:6]}** **** {number[-4:]}"
+        # Специальный формат для American Express (15 цифр)
+        if normalized_type == "american express":
+            masked_number = f"{number[:4]} {number[4:6]}**** **{number[-3:]}"
+        else:
+            # Стандартный формат для 16-значных карт
+            masked_number = f"{number[:4]} {number[4:6]}** **** {number[-4:]}"
+
         return f"{data_type.title()} {masked_number}"
 
     # Маскировка для счетов

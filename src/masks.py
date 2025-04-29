@@ -31,6 +31,6 @@ def get_mask_account(account_number: int) -> str:
         return f"Номер слишком короткий (минимум {VISIBLE_DIGITS} цифры)"
 
     # Маскируем: ** + последние VISIBLE_DIGITS цифр
-    masked_number = f"{str_number[-VISIBLE_DIGITS:]}"
+    masked_number = f"**{str_number[-VISIBLE_DIGITS:]}"
 
     return masked_number
