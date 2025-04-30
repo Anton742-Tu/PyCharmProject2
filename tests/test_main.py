@@ -3,7 +3,9 @@ from src.widget import mask_account_card, get_date
 
 
 def test_card_masking():
-    """Тестирует маскировку карт"""
+    """
+    Тестирует маскировку карт.
+    """
     assert get_mask_card_number("1234567890123456") == "1234 56** **** 3456", "Тест 1 не пройден"
     assert get_mask_card_number("1234 5678 9012 3456") == "1234 56** **** 3456", "Тест 2 не пройден"
     assert get_mask_card_number("1234") == "Некорректный номер карты", "Тест 3 не пройден"
@@ -12,7 +14,9 @@ def test_card_masking():
 
 
 def test_account_masking():
-    """Тестирует маскировку счетов"""
+    """
+    Тестирует маскировку счетов.
+    """
     assert get_mask_account("123456") == "**3456", "Тест 6 не пройден"
     assert get_mask_account("1234 5678") == "**5678", "Тест 7 не пройден"
     assert get_mask_account("12") == "Номер слишком короткий (минимум 4 цифры)", "Тест 8 не пройден"  # Исправлено!
@@ -21,7 +25,9 @@ def test_account_masking():
 
 
 def test_mask_account_card():
-    """Тестирует маскировку карт и счетов."""
+    """
+    Тестирует маскировку карт и счетов..
+    """
     # Тест для карт
     assert mask_account_card("Visa 1234567890123456") == "Visa 1234 56** **** 3456"
     assert mask_account_card("Mastercard 1234567890123456") == "Mastercard 1234 56** **** 3456"
@@ -42,7 +48,9 @@ def test_mask_account_card():
 
 
 def test_get_date():
-    """Тестирует форматирование даты."""
+    """
+    Тестирует форматирование даты.
+    """
     # Корректные форматы
     assert get_date("2024-03-11T02:26:18.671407") == "11.03.2024"
     assert get_date("1999-12-31T23:59:59.999999") == "31.12.1999"
