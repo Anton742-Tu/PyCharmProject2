@@ -41,6 +41,5 @@ sort_by_date([{"date": "2023-01-01"}], reverse="yes")
 'masks' и 'widget'
 
 ## Тестирование:
- - Тестирование с помощью 'assert', модуля 'masks.py'
  - Тестирование с помощью 'assert', модуля 'widget.py'
  - Тестирование с помощью 'assert', модуля 'processing.py'

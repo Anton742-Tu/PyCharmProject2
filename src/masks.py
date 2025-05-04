@@ -1,6 +1,6 @@
 # Константы
-CARD_NUMBER_LENGTH = 16
-VISIBLE_DIGITS = 4
+CARD_NUMBER_LENGTH: int = 16
+VISIBLE_DIGITS: int = 4
 
 
 def get_mask_card_number(card_number: int) -> str:
