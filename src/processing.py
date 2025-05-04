@@ -2,32 +2,26 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 
-def filter_by_state(
-        list_of_dicts: List[Dict[str, Any]],
-        state: str = 'EXECUTED'
-) -> List[Dict[str, Any]]:
+def filter_by_state(list_of_dicts: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
     """
     Фильтрует словари по ключу 'state'.
     """
     assert isinstance(list_of_dicts, list), "list_of_dicts должен быть списком"
     assert isinstance(state, str), "state должен быть строкой"
-    return [d for d in list_of_dicts if d.get('state') == state]
+    return [d for d in list_of_dicts if d.get("state") == state]
 
 
-def sort_by_date(
-        list_of_dicts: List[Dict[str, Any]],
-        reverse: bool = True
-) -> List[Dict[str, Any]]:
+def sort_by_date(list_of_dicts: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
     """
     Сортирует список словарей по дате (ключ 'date')
     """
     assert isinstance(list_of_dicts, list), "list_of_dicts должен быть списком"
     assert isinstance(reverse, bool), "reverse должен быть True или False"
-    return sorted(list_of_dicts, key=lambda x: datetime.fromisoformat(x['date']), reverse=reverse)
+    return sorted(list_of_dicts, key=lambda x: datetime.fromisoformat(x["date"]), reverse=reverse)
 
 
 # =========================================== ТЕСТЫ =================================================
-def test_filter_by_state():
+def test_filter_by_state() -> None:
     # Тестовые данные
     test_data = [
         {"id": 1, "state": "EXECUTED"},
@@ -44,7 +38,8 @@ def test_filter_by_state():
     filtered_default = filter_by_state(test_data)
     assert filtered == filtered_default, "Результаты должны совпадать"
 
-def test_sort_by_date():
+
+def test_sort_by_date() -> None:
     # Тестовые данные
     test_data = [
         {"id": 1, "date": "2023-10-01T12:00:00"},
