@@ -1,9 +1,10 @@
 # Константы
-CARD_NUMBER_LENGTH = 16
-VISIBLE_DIGITS = 4
+CARD_NUMBER_LENGTH: int = 16
+VISIBLE_DIGITS: int = 4
 
 
 def get_mask_card_number(card_number: int) -> str:
+
     # Преобразуем номер карты в строку
     str_number = str(card_number).replace(" ", "")
 
@@ -31,6 +32,6 @@ def get_mask_account(account_number: int) -> str:
         return f"Номер слишком короткий (минимум {VISIBLE_DIGITS} цифры)"
 
     # Маскируем: ** + последние VISIBLE_DIGITS цифр
-    masked_number = f"{str_number[-VISIBLE_DIGITS:]}"
+    masked_number = f"**{str_number[-VISIBLE_DIGITS:]}"
 
     return masked_number
