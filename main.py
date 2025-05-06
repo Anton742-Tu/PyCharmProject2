@@ -1,6 +1,6 @@
 from src.masks import get_mask_card_number, get_mask_account
 from src.widget import mask_account_card, get_date
-from src.processing import test_filter_by_state, test_sort_by_date
+from tests.test_processing import test_filter_by_state, test_sort_by_date
 from tests.test_main import test_mask_account_card, test_get_date
 
 
