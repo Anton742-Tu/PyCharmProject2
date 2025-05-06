@@ -1,3 +1,5 @@
+from tomlkit import value
+
 from src.widget import mask_account_card, get_date
 
 from typing import Tuple
@@ -51,8 +53,9 @@ def test_get_date() -> None:
         ("1234", "Некорректный номер карты"),
         ("abcdefghijklmnop", "Некорректный номер карты"),
         ("12345678901234567890", "Некорректный номер карты"),
-])
-def card_test_cases(request: pytest.FixtureRequest) -> Tuple[str, str]:
+    ]
+)
+def card_test_cases(request: pytest.FixtureRequest) -> Tuple[int, str]:
     return request.param
 
 
@@ -63,8 +66,9 @@ def card_test_cases(request: pytest.FixtureRequest) -> Tuple[str, str]:
         ("12", "Номер слишком короткий (минимум 4 цифры)"),
         ("abcdef", "Некорректный номер счёта"),
         ("1234567890", "**7890"),
-])
-def account_test_cases(request: pytest.FixtureRequest) -> Tuple[str, str]:
+    ]
+)
+def account_test_cases(request: pytest.FixtureRequest) -> Tuple[int, str]:
     return request.param
 
 
@@ -83,12 +87,15 @@ def test_account_masking(account_test_cases: Tuple[int, str]) -> None:
 
 
 # Параметризация с аннотацией типов
-@pytest.mark.parametrize("input_data, expected", [
-    ("", "Некорректный номер счёта"),
-    ("1" * 3, "Номер слишком короткий (минимум 4 цифры)"),
-    ("1"*4, "**1111"),
-    ("1"*10, "**1111")
-])
+@pytest.mark.parametrize(
+    "input_data, expected",
+    [
+        ("", "Некорректный номер счёта"),
+        ("1" * 3, "Номер слишком короткий (минимум 4 цифры)"),
+        ("1" * 4, "**1111"),
+        ("1" * 10, "**1111"),
+    ],
+)
 def test_edge_cases_account(input_data: int, expected: str) -> None:
     result: str = get_mask_account(input_data)
     assert result == expected
