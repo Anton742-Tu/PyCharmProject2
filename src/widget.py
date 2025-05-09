@@ -36,7 +36,7 @@ SUPPORTED_TYPES: Dict[str, str] = {
 def mask_account_card(data: str) -> str:
     """
     Маскирует номер карты или счёта в переданной строке.
-    - American Express (15 Цифр): XXXX XXXXXX XXXXX
+    - American Express (15 Цифр): XXXX XX**** **XXX
     - Другие карты (16 цифр): XXXX XX** **** XXXX
     - Счета: **XXXX
     Возвращает маскированную строку или сообщение об ошибке.
