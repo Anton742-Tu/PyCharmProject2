@@ -26,50 +26,88 @@ pip install pytest
 
 ## *Модуль 'generators.py'*
 ### [Функция filter_by_currency:](https://write.geeksforgeeks.org/)
-usd_transactions = filter_by_currency(transactions, "USD")
+```usd_transactions = filter_by_currency(transactions, "USD")```
 
  - Получаем две транзакции через next()
+```
 print(next(usd_transactions))  # Первая USD-транзакция
 print(next(usd_transactions))  # Вторая USD-транзакция
-
+```
 ### [Функция transaction_description:](https://write.geeksforgeeks.org/)
- - Создаём генератор
-descriptions = transaction_descriptions(transactions)
+```
+transactions = [
+    {"id": 1, "description": "Перевод организации"},
+    {"id": 2, "description": None},                  # Пропустится
+    {"id": 3, "description": "Покупка валюты"},
+    {"id": 4, "description": 12345},                # Пропустится (не строка)
+    {"id": 5},                                      # Пропустится (нет ключа)
+]
+```
 
- - Получаем описания по одному через next()
-print(next(descriptions))  # "Перевод организации"
-print(next(descriptions))  # "Перевод со счета на счет"
-print(next(descriptions))  # "Покупка валюты"
-
- - Или обходим в цикле
+ - Получаем только строковые описания
+```
 for desc in transaction_descriptions(transactions):
- - print(desc)
+    print(desc)
+```
 
 ### [Функция card_number_generator:](https://write.geeksforgeeks.org/)
  - Генерация номеров от "0000 0000 0000 0001" до "0000 0000 0000 0005"
-
+```
 card_gen = card_number_generator(1, 5)
 for _ in range(5):
     print(next(card_gen))
-
+```
+## *Примеры использования тест-кейсов:*
+### [Вывод тестов для функции 'filter_by_currency'](https://write.geeksforgeeks.org/)
+```
+test_filter_by_currency.py::test_filter_by_currency[USD-expected_ids0] PASSED
+test_filter_by_currency.py::test_filter_by_currency[EUR-expected_ids1] PASSED
+test_filter_by_currency.py::test_filter_by_currency[RUB-expected_ids2] PASSED
+test_filter_by_currency.py::test_filter_by_currency[GBP-expected_ids3] PASSED
+test_filter_by_currency.py::test_filter_by_currency_empty_input PASSED
+test_filter_by_currency.py::test_filter_by_currency_invalid_structure PASSED
+```
+### [Вывод тестов для функции 'transaction_descriptions'](https://write.geeksforgeeks.org/)
+```
+test_transaction_descriptions.py::test_transaction_descriptions_valid PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_empty_list PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_no_description PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_parametrized[Оплата налогов-expected0] PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_parametrized[None-expected1] PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_parametrized[123-expected2] PASSED
+test_transaction_descriptions.py::test_transaction_descriptions_parametrized[-expected3] PASSED
+```
+### [Вывод тестов для функции 'card_number_generator'](https://write.geeksforgeeks.org/)
+```
+test_card_number_generator.py::test_card_number_generator_range[1-3-expected_numbers0] PASSED
+test_card_number_generator.py::test_card_number_generator_range[9999-10001-expected_numbers1] PASSED
+test_card_number_generator.py::test_card_number_generator_format PASSED
+test_card_number_generator.py::test_card_number_generator_invalid_range PASSED
+test_card_number_generator.py::test_card_number_generator_edge_cases PASSED
+```
 ### [Пример срабатывания 'assert' в модуле 'processing.py'](https://write.geeksforgeeks.org/)
  - Вызовет AssertionError: 'list_of_dicts должен быть списком'
+```
 filter_by_state(None, "EXECUTED")  
-
+```
  - Вызовет AssertionError: 'state должен быть строкой'
+```
 filter_by_state([{"state": "EXECUTED"}], 123)  
-
+```
  - Вызовет AssertionError: 'list_of_dicts должен быть списком'
+```
 sort_by_date('not a list')  
-
+```
  - Вызовет AssertionError: 'reverse должен быть True или False'
+```
 sort_by_date([{"date": "2023-01-01"}], reverse="yes")
+```
 
 ## *Документация:*
 Тестирование проводиться через команду 'Pytest' или 'python main.py'
 В процессе выполнения тестов, показана работа функций из модуля
 'masks' и 'widget'
-
 ## *Тестирование:*
  - Тестирование с помощью 'assert', модуля 'widget.py'
  - Тестирование с помощью 'assert', модуля 'processing.py'
+ - Также добавили Фикстуры, парамитризационные данные в другие модули.
