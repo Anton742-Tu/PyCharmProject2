@@ -14,10 +14,10 @@ def filter_by_currency(transactions: List[Dict[str, Any]], currency: str) -> Ite
 
     for transaction in transactions:
         if not isinstance(transaction, dict):
-            continue # Пропускаем некорректные элементы
+            continue  # Пропускаем некорректные элементы
 
         try:
-            if transaction.get('operationAmount', {}).get('currency', {}).get('code') == currency:
+            if transaction.get("operationAmount", {}).get("currency", {}).get("code") == currency:
                 yield transaction
         except AttributeError:
             continue

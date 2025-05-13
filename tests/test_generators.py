@@ -3,7 +3,7 @@ from typing import Dict, Any, List
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
 
-def test_filter_bay_currency() -> None:
+def test_filter_by_currency() -> None:
     # Подготовка тестовых данных
     transactions = [
         {"operationAmount": {"currency": {"code": "USD"}}},
@@ -26,6 +26,11 @@ def test_filter_bay_currency() -> None:
     # Тест 4: Пустой список транзакций
     result = list(filter_by_currency([], "USD"))
     assert len(result) == 0, "Для пустого списка должен вернуться пустой результат"
+
+
+def test_filter_by_currency_empty_input() -> None:
+    """Тест на пустом списке транзакций."""
+    assert list(filter_by_currency([], "USD")) == []
 
 
 @pytest.fixture
