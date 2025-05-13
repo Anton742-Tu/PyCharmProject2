@@ -3,19 +3,24 @@ from typing import List, Dict, Any, Iterator
 
 def filter_by_currency(transactions: List[Dict[str, Any]], currency: str) -> Iterator[Dict[str, Any]]:
     """
-    Фильтрует транзакции по валюте с проверкой типов.
+    Фильтрует транзакции по валюте.
     """
     if not isinstance(transactions, list):
         raise TypeError("transactions должен быть списком")
-    if not isinstance(currency, str) or len(currency) != 3:
-        raise TypeError("currency должен быть строкой из 3 символов")
+    if not isinstance(currency, str):
+        raise TypeError("currency должен быть строкой")
+    if len(currency) != 3:
+        raise ValueError("currency должен быть строкой из 3 символов")
 
     for transaction in transactions:
+        if not isinstance(transaction, dict):
+            continue  # Пропускаем некорректные элементы
+
         try:
-            if transaction.get('operationAmount', {}).get('currency', {}).get('code') == currency:
+            if transaction.get("operationAmount", {}).get("currency", {}).get("code") == currency:
                 yield transaction
         except AttributeError:
-            continue  # Пропускаем транзакции с некорректной структурой
+            continue
 
 
 def transaction_descriptions(transactions: list[Dict[str, Any]]) -> Iterator[str]:
