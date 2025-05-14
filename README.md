@@ -14,7 +14,7 @@ pip install -r requirements.txt
 pip install pytest
 ```
 
-## *Примеры использования функции:*
+## *Примеры использования функций:*
 ## *Модуль 'widget.py'*
 ### [Функция mask_account_card:](https://write.geeksforgeeks.org/)
  - Катры с 15-ю цифрами:
@@ -56,6 +56,20 @@ for desc in transaction_descriptions(transactions):
 card_gen = card_number_generator(1, 5)
 for _ in range(5):
     print(next(card_gen))
+```
+## *Модуль 'decorators.py'*
+### [Функция filename:](https://write.geeksforgeeks.org/)
+```
+@log('operations.log')
+def divide(a, b):
+    """Простая функция деления"""
+    return a / b
+
+# Успешный вызов
+divide(10, 2)
+
+# Вызов с ошибкой
+divide(10, 0)
 ```
 ## *Примеры использования тест-кейсов:*
 ### [Вывод тестов для функции 'filter_by_currency'](https://write.geeksforgeeks.org/)
