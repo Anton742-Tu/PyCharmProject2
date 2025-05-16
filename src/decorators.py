@@ -12,18 +12,18 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable
     Декоратор для логирования вызовов функций и ошибок.
     """
 
-    def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        @wraps(func)
+    def decorator(_func: Callable[..., T]) -> Callable[..., T]:
+        @wraps(_func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
             # Формируем базовую информацию о вызове
             timestamp: str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             call_info: str = (
-                f"\n[{timestamp}] {func.__name__}\n"
+                f"\n[{timestamp}] {_func.__name__}\n"
                 f"Arguments: args={args}, kwargs={kwargs}\n"
             )
 
             try:
-                result: T = func(*args, **kwargs)
+                result: T = _func(*args, **kwargs)
                 log_entry: str = f"{call_info}Returned: {result}\n{'-' * 40}"
                 _write_log(log_entry, filename)
                 return result
