@@ -23,3 +23,16 @@ if __name__ == "__main__":
     test_filter_by_state()
     test_sort_by_date()
     print("- Тесты модуля 'processing.py'\n Прошли успешно!")
+
+
+if __name__ == "__main__":
+    # Вариант с TypedDict
+    transaction1: Transaction = {"amount": "100", "currency": "RUB"}
+    transaction2: Transaction = {"amount": 50, "currency": "USD"}
+
+    # Вариант с dataclass
+    transaction3 = TransactionDC(amount="70", currency="EUR")
+
+    print(get_amount_in_rub(transaction1))  # 100.0
+    print(get_amount_in_rub(transaction2))  # Конвертирует USD в RUB
+    print(get_amount_in_rub(transaction3))  # Конвертирует EUR в RUB
