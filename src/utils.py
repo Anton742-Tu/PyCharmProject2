@@ -14,7 +14,7 @@ def read_transactions_from_json(file_path: str) -> Union[Dict[str, Any], List[An
         или пустой список в случае ошибок
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
             return data if isinstance(data, list) else []
     except (FileNotFoundError, json.JSONDecodeError):
