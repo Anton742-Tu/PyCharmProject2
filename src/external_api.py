@@ -1,91 +1,56 @@
-from dataclasses import dataclass
-from typing import Literal, TypedDict
+import os
 import requests
-from typing import Union
-
-def convert_with_exchangerate(amount: float, currency: str) -> float:
-    API_KEY = 'Kqd4W1LUppWQL1SYvdIt0ideaRMl75wT'
-    url = f'https://api.apilayer.com/exchangerates_data/live?base=USD&symbols=EUR,GBP{API_KEY}/latest/{currency}'
+from dotenv import load_dotenv
+from typing import Dict, Union, Optional
 
 
-    response = requests.get(url)
-    data = response.json()
-
-    if data['result'] == 'success':
-        rate = data['conversion_rates']['RUB']
-        return round(amount * rate, 2)
-    else:
-        raise Exception("Ошибка получения курса")
+# Загружаем переменные из .env
+load_dotenv()
 
 
-# Определяем типы для валют
-Currency = Literal["RUB", "USD", "EUR"]
-
-
-# Определяем структуру транзакции с помощью TypedDict
-class Transaction(TypedDict):
-    amount: float | str
-    currency: Currency
-
-
-# Или через dataclass (альтернативный вариант)
-@dataclass
-class TransactionDC:
-    amount: float | str
-    currency: Currency
-
-
-# Определяем тип для ответа API курсов валют
-class ExchangeRates(TypedDict):
-    rates: dict[str, float]
-    base: str
-    date: str
-
-
-def convert_currency(amount: Union[float, str],
-                     currency: str,
-                     provider: str = 'cbr') -> float:
+def get_amount_in_rub(transaction: Dict[str, Union[str, float]]) -> float:
     """
-    Универсальный конвертер валют
+    Конвертирует сумму транзакции в рубли.
 
-    :param amount: Сумма для конвертации
-    :param currency: Исходная валюта (USD, EUR и др.)
-    :param provider: Источник курса (cbr, exchangerate, fixer)
-    :return: Сумма в рублях
+    Args:
+         transaction: Словарь с ключами 'amount' (str | float) и 'currency' (str).
+    Returns:
+         Сумма в рублях (float).
+    Raises:
+         ValueError: Если API ключ отсутствует или курс валюты не получен.
     """
+    amount = float(transaction.get('amount', 0))
+    currency = transaction.get('currency', 'RUB').upper()
+
+    if currency == 'RUB':
+        return amount
+
+    API_KEY: Optional[str] = os.getenv('API_KEY')
+    if not API_KEY:
+        raise ValueError("API ключ не найден в переменных окружения")
+
+    URL = f'https://api.apilayer.com/exchangerates_data/latest?base={currency}&symbols=RUB'
+
     try:
-        amount = float(amount)
-        currency = currency.upper()
+        response: requests.Response = requests.get(
+            URL,
+            headers={'apikey': API_KEY},
+            timeout=10
+        )
+        response.raise_for_status()
+        data: Dict = response.json()
 
-        if currency == 'RUB':
-            return amount
+        if 'rates' not in data or 'RUB' not in data['rates']:
+            raise ValueError(f"Не удалось получить курс {currency} к RUB")
 
-        if provider == 'cbr':
-            response = requests.get('https://www.cbr-xml-daily.ru/daily_json.js', timeout=5)
-            response.raise_for_status()
-            data = response.json()
-            rate = data['Valute'][currency]['Value']
-            nominal = data['Valute'][currency]['Nominal']
-            return round(amount * (rate / nominal), 2)
+        rate: float = data['rates']['RUB']
+        return amount * rate
 
-        elif provider == 'exchangerate':
-            # Реализация для ExchangeRate-API
-            return None
-
-        else:
-            raise ValueError("Неизвестный провайдер курсов валют")
-
-    except requests.RequestException as e:
-        raise ConnectionError(f"Ошибка подключения к API: {str(e)}")
-    except KeyError:
-        raise ValueError(f"Валюта {currency} не поддерживается")
-    except Exception as e:
-        raise Exception(f"Ошибка конвертации: {str(e)}")
+    except requests.exceptions.RequestException as e:
+        raise ValueError(f"Ошибка при запросе к API: {e}")
 
 
-# Пример использования
-#try:
-#    print(convert_currency(100, 'USD'))
-#    print(convert_currency("50.5", 'EUR'))
-#except Exception as e:
-#    print(f"Ошибка: {str(e)}")
+# Пример использования (для тестов)
+if __name__ == "__main__":
+    transaction = {'amount': '100', 'currency': 'USD'}
+    print(get_amount_in_rub(transaction))
