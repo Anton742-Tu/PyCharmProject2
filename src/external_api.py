@@ -8,19 +8,19 @@ from typing import Dict, Union, Optional
 load_dotenv()
 
 
-def get_amount_in_rub(transaction: Dict[str, Union[str, float]]) -> float:
+def get_amount_in_rub(_transaction: Dict[str, Union[str, float]]) -> float:
     """
     Конвертирует сумму транзакции в рубли.
 
     Args:
-         transaction: Словарь с ключами 'amount' (str | float) и 'currency' (str).
+         _transaction: Словарь с ключами 'amount' (str | float) и 'currency' (str).
     Returns:
          Сумма в рублях (float).
     Raises:
          ValueError: Если API ключ отсутствует или курс валюты не получен.
     """
-    amount = float(transaction.get('amount', 0))
-    currency = transaction.get('currency', 'RUB').upper()
+    amount = float(_transaction.get('amount', 0))
+    currency = _transaction.get('currency', 'RUB').upper()
 
     if currency == 'RUB':
         return amount

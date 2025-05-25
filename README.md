@@ -81,7 +81,7 @@ test_filter_by_currency.py::test_filter_by_currency[GBP-expected_ids3] PASSED
 test_filter_by_currency.py::test_filter_by_currency_empty_input PASSED
 test_filter_by_currency.py::test_filter_by_currency_invalid_structure PASSED
 ```
-### [Вывод тестов для функции 'transaction_descriptions'](https://write.geeksforgeeks.org/)
+### [Вывод тестов для функции 'transaction_descriptions '](https://write.geeksforgeeks.org/)
 ```
 test_transaction_descriptions.py::test_transaction_descriptions_valid PASSED
 test_transaction_descriptions.py::test_transaction_descriptions_empty_list PASSED
@@ -142,7 +142,7 @@ print(get_amount_in_rub(transaction3))  # Конвертирует EUR в RUB п
 Тестирование проводиться через команду 'Pytest' или 'python main.py'
 В процессе выполнения тестов, показана работа функций из модуля
 'masks' и 'widget'
-
+## *Инструкция:*
 Перед запуском проекта:
 1. Скопируйте .env.example в .env
 2. Заполните .env реальными значениями
