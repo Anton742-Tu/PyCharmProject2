@@ -4,7 +4,7 @@ import traceback
 from typing import Callable, TypeVar, Any, Optional
 import sys
 
-T = TypeVar("T")  # Generic тип для возвращаемого значения функции
+T = TypeVar('T')  # Generic тип для возвращаемого значения функции
 
 
 def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable[..., T]]:
@@ -16,8 +16,11 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable
         @wraps(_func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
             # Формируем базовую информацию о вызове
-            timestamp: str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            call_info: str = f"\n[{timestamp}] {_func.__name__}\n" f"Arguments: args={args}, kwargs={kwargs}\n"
+            timestamp: str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            call_info: str = (
+                f"\n[{timestamp}] {_func.__name__}\n"
+                f"Arguments: args={args}, kwargs={kwargs}\n"
+            )
 
             try:
                 result: T = _func(*args, **kwargs)
@@ -52,7 +55,7 @@ def _write_log(message: str, filename: Optional[str] = None) -> None:
 
     if filename:
         try:
-            with open(filename, "a", encoding="utf-8") as f:
+            with open(filename, 'a', encoding='utf-8') as f:
                 f.write(message + "\n")
         except IOError as e:
             print(f"Ошибка записи в файл {filename}: {e}", file=sys.stderr)
