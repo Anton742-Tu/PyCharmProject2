@@ -8,7 +8,7 @@ from src.decorators import log
 
 # Вспомогательные функции
 def read_file(filename: str) -> str:
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         return f.read()
 
 
@@ -16,7 +16,7 @@ def read_file(filename: str) -> str:
 def test_time_formatting(capsys):
     test_time = datetime(2023, 1, 15, 12, 30, 45)
 
-    with patch('datetime.datetime') as mock_datetime:
+    with patch("datetime.datetime") as mock_datetime:
         mock_datetime.now.return_value = test_time
 
         @log()
@@ -66,7 +66,7 @@ def test_error_logging(capsys, tmp_path):
     log_file = tmp_path / "error.log"
 
     @log(str(log_file))
-    def fail():
+    def fail() -> None:
         raise ValueError("Test error")
 
     with pytest.raises(ValueError):
