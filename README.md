@@ -13,7 +13,10 @@ pip install -r requirements.txt
 ```
 pip install pytest
 ```
-
+## *Инструкция:*
+Перед запуском проекта:
+1. Скопируйте .env.example в .env
+2. Заполните .env реальными значениями
 ## *Примеры использования функций:*
 ## *Модуль 'widget.py'*
 ### [Функция mask_account_card:](https://write.geeksforgeeks.org/)
@@ -142,10 +145,6 @@ print(get_amount_in_rub(transaction3))  # Конвертирует EUR в RUB п
 Тестирование проводиться через команду 'Pytest' или 'python main.py'
 В процессе выполнения тестов, показана работа функций из модуля
 'masks' и 'widget'
-## *Инструкция:*
-Перед запуском проекта:
-1. Скопируйте .env.example в .env
-2. Заполните .env реальными значениями
 ## *Тестирование:*
  - Тестирование с помощью 'assert', модуля 'widget.py'
  - Тестирование с помощью 'assert', модуля 'processing.py'
