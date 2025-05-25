@@ -1,56 +1,51 @@
 import os
 import requests
+from typing import Dict, Union, cast
 from dotenv import load_dotenv
-from typing import Dict, Union, Optional
 
-
-# Загружаем переменные из .env
 load_dotenv()
 
 
-def get_amount_in_rub(_transaction: Dict[str, Union[str, float]]) -> float:
+def get_amount_in_rub(transaction: Dict[str, Union[str, float, int]]) -> float:
     """
     Конвертирует сумму транзакции в рубли.
 
     Args:
-         _transaction: Словарь с ключами 'amount' (str | float) и 'currency' (str).
-    Returns:
-         Сумма в рублях (float).
-    Raises:
-         ValueError: Если API ключ отсутствует или курс валюты не получен.
-    """
-    amount = float(_transaction.get('amount', 0))
-    currency = _transaction.get('currency', 'RUB').upper()
+        transaction: Словарь с ключами 'amount' (str | float | int) и 'currency' (str).
 
-    if currency == 'RUB':
+    Returns:
+        Сумма в рублях (float).
+
+    Raises:
+        ValueError: Если API ключ отсутствует или курс валюты не получен.
+    """
+    # Явное приведение amount к float
+    amount_str = transaction.get("amount")
+    if amount_str is None:
+        amount = 0.0
+    else:
+        amount = float(amount_str)  # Гарантированно float
+
+    currency = str(transaction.get("currency", "RUB")).upper()
+
+    if currency == "RUB":
         return amount
 
-    API_KEY: Optional[str] = os.getenv('API_KEY')
+    API_KEY = os.getenv("API_KEY")
     if not API_KEY:
-        raise ValueError("API ключ не найден в переменных окружения")
+        raise ValueError("API ключ не найден в .env")
 
-    URL = f'https://api.apilayer.com/exchangerates_data/latest?base={currency}&symbols=RUB'
+    url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency}&symbols=RUB"
 
     try:
-        response: requests.Response = requests.get(
-            URL,
-            headers={'apikey': API_KEY},
-            timeout=10
-        )
+        response = requests.get(url, headers={"apikey": API_KEY}, timeout=10)
         response.raise_for_status()
-        data: Dict = response.json()
 
-        if 'rates' not in data or 'RUB' not in data['rates']:
-            raise ValueError(f"Не удалось получить курс {currency} к RUB")
+        # Аннотация типа для response.json()
+        data = cast(Dict[str, Dict[str, float]], response.json())
 
-        rate: float = data['rates']['RUB']
+        rate = data["rates"]["RUB"]  # Теперь mypy знает, что это float
         return amount * rate
 
-    except requests.exceptions.RequestException as e:
-        raise ValueError(f"Ошибка при запросе к API: {e}")
-
-
-# Пример использования (для тестов)
-if __name__ == "__main__":
-    transaction = {'amount': '100', 'currency': 'USD'}
-    print(get_amount_in_rub(transaction))
+    except Exception as e:
+        raise ValueError(f"Ошибка конвертации: {e}")
