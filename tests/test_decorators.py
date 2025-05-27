@@ -9,7 +9,7 @@ from src.decorators import log
 
 # Вспомогательные функции с аннотациями типов
 def read_file(filename: str) -> str:
-    with open(filename, 'r', encoding='utf-8') as f:
+    with open(filename, "r", encoding="utf-8") as f:
         return f.read()
 
 
@@ -17,7 +17,7 @@ def read_file(filename: str) -> str:
 def test_time_formatting(capsys: pytest.CaptureFixture[str]) -> None:
     test_time = datetime(2023, 1, 15, 12, 30, 45)
 
-    with patch('datetime.datetime') as mock_datetime:
+    with patch("datetime.datetime") as mock_datetime:
         mock_datetime.now.return_value = test_time
 
         @log()
@@ -63,10 +63,7 @@ def test_file_logging(tmp_path: Path) -> None:
 
 
 # 4. Тест логирования ошибок
-def test_error_logging(
-        capsys: pytest.CaptureFixture[str],
-        tmp_path: Path
-) -> None:
+def test_error_logging(capsys: pytest.CaptureFixture[str], tmp_path: Path) -> None:
     log_file = tmp_path / "error.log"
 
     @log(str(log_file))
@@ -99,10 +96,7 @@ def test_preserves_metadata() -> None:
 
 
 # 7. Тест обработки ошибок файловой системы
-def test_file_errors_handling(
-        capsys: pytest.CaptureFixture[str],
-        monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_file_errors_handling(capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_open(*args: Any, **kwargs: Any) -> MagicMock:
         raise IOError("Disk error")
 
@@ -122,12 +116,7 @@ def test_file_errors_handling(
 # 8. Тест с различными типами аргументов
 def test_various_argument_types(capsys: pytest.CaptureFixture[str]) -> None:
     @log()
-    def complex_func(
-            a: int,
-            b: str,
-            c: List[int],
-            d: Dict[str, str]
-    ) -> Tuple[int, str, List[int], Dict[str, str]]:
+    def complex_func(a: int, b: str, c: List[int], d: Dict[str, str]) -> Tuple[int, str, List[int], Dict[str, str]]:
         return a, b, c, d
 
     complex_func(1, "test", [1, 2], {"key": "value"})
