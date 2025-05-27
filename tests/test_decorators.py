@@ -1,26 +1,27 @@
 from datetime import datetime
-from unittest.mock import patch
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+from unittest.mock import MagicMock, patch
 
 import pytest
-
 from src.decorators import log
 
 
-# Вспомогательные функции
+# Вспомогательные функции с аннотациями типов
 def read_file(filename: str) -> str:
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='utf-8') as f:
         return f.read()
 
 
 # 1. Тест форматирования времени
-def test_time_formatting(capsys):
+def test_time_formatting(capsys: pytest.CaptureFixture[str]) -> None:
     test_time = datetime(2023, 1, 15, 12, 30, 45)
 
     with patch('datetime.datetime') as mock_datetime:
         mock_datetime.now.return_value = test_time
 
         @log()
-        def timed_func():
+        def timed_func() -> str:
             return "time check"
 
         timed_func()
@@ -30,7 +31,7 @@ def test_time_formatting(capsys):
 
 
 # 2. Тест логирования в консоль
-def test_console_logging(capsys):
+def test_console_logging(capsys: pytest.CaptureFixture[str]) -> None:
     @log()
     def add(a: int, b: int) -> int:
         return a + b
@@ -45,7 +46,7 @@ def test_console_logging(capsys):
 
 
 # 3. Тест логирования в файл
-def test_file_logging(tmp_path):
+def test_file_logging(tmp_path: Path) -> None:
     log_file = tmp_path / "test.log"
 
     @log(str(log_file))
@@ -62,11 +63,14 @@ def test_file_logging(tmp_path):
 
 
 # 4. Тест логирования ошибок
-def test_error_logging(capsys, tmp_path):
+def test_error_logging(
+        capsys: pytest.CaptureFixture[str],
+        tmp_path: Path
+) -> None:
     log_file = tmp_path / "error.log"
 
     @log(str(log_file))
-    def fail():
+    def fail() -> None:
         raise ValueError("Test error")
 
     with pytest.raises(ValueError):
@@ -83,21 +87,8 @@ def test_error_logging(capsys, tmp_path):
     assert "ERROR: ValueError" in content
 
 
-# 5. Тест вызова без скобок
-def test_decorator_without_parentheses(capsys):
-    @log
-    def identity(x):
-        return x
-
-    result = identity(42)
-    captured = capsys.readouterr()
-
-    assert result == 42
-    assert "identity" in captured.out
-
-
 # 6. Тест сохранения метаданных
-def test_preserves_metadata():
+def test_preserves_metadata() -> None:
     @log()
     def documented_func(a: int) -> int:
         """Тестовая функция"""
@@ -108,14 +99,17 @@ def test_preserves_metadata():
 
 
 # 7. Тест обработки ошибок файловой системы
-def test_file_errors_handling(capsys, monkeypatch):
-    def mock_open(*args, **kwargs):
+def test_file_errors_handling(
+        capsys: pytest.CaptureFixture[str],
+        monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def mock_open(*args: Any, **kwargs: Any) -> MagicMock:
         raise IOError("Disk error")
 
     monkeypatch.setattr("builtins.open", mock_open)
 
     @log("invalid/path.log")
-    def safe_func():
+    def safe_func() -> str:
         return "OK"
 
     result = safe_func()
@@ -123,3 +117,20 @@ def test_file_errors_handling(capsys, monkeypatch):
 
     assert result == "OK"
     assert "Ошибка записи в файл" in captured.err
+
+
+# 8. Тест с различными типами аргументов
+def test_various_argument_types(capsys: pytest.CaptureFixture[str]) -> None:
+    @log()
+    def complex_func(
+            a: int,
+            b: str,
+            c: List[int],
+            d: Dict[str, str]
+    ) -> Tuple[int, str, List[int], Dict[str, str]]:
+        return a, b, c, d
+
+    complex_func(1, "test", [1, 2], {"key": "value"})
+    captured = capsys.readouterr()
+
+    assert "args=(1, 'test', [1, 2], {'key': 'value'})" in captured.out

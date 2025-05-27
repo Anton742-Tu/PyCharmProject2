@@ -13,7 +13,10 @@ pip install -r requirements.txt
 ```
 pip install pytest
 ```
-
+## *Инструкция:*
+Перед запуском проекта:
+1. Скопируйте .env.example в .env
+2. Заполните .env реальными значениями
 ## *Примеры использования функций:*
 ## *Модуль 'widget.py'*
 ### [Функция mask_account_card:](https://write.geeksforgeeks.org/)
@@ -81,7 +84,7 @@ test_filter_by_currency.py::test_filter_by_currency[GBP-expected_ids3] PASSED
 test_filter_by_currency.py::test_filter_by_currency_empty_input PASSED
 test_filter_by_currency.py::test_filter_by_currency_invalid_structure PASSED
 ```
-### [Вывод тестов для функции 'transaction_descriptions'](https://write.geeksforgeeks.org/)
+### [Вывод тестов для функции 'transaction_descriptions '](https://write.geeksforgeeks.org/)
 ```
 test_transaction_descriptions.py::test_transaction_descriptions_valid PASSED
 test_transaction_descriptions.py::test_transaction_descriptions_empty_list PASSED
