@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Tuple
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src.decorators import log  # Замените на ваш реальный импорт
+from src.decorators import log
 
 
 # Вспомогательные функции с аннотациями типов
