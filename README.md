@@ -13,7 +13,10 @@ pip install -r requirements.txt
 ```
 pip install pytest
 ```
-
+## *Инструкция:*
+Перед запуском проекта:
+1. Скопируйте .env.example в .env
+2. Заполните .env реальными значениями
 ## *Примеры использования функций:*
 ## *Модуль 'widget.py'*
 ### [Функция mask_account_card:](https://write.geeksforgeeks.org/)
@@ -81,7 +84,7 @@ test_filter_by_currency.py::test_filter_by_currency[GBP-expected_ids3] PASSED
 test_filter_by_currency.py::test_filter_by_currency_empty_input PASSED
 test_filter_by_currency.py::test_filter_by_currency_invalid_structure PASSED
 ```
-### [Вывод тестов для функции 'transaction_descriptions'](https://write.geeksforgeeks.org/)
+### [Вывод тестов для функции 'transaction_descriptions '](https://write.geeksforgeeks.org/)
 ```
 test_transaction_descriptions.py::test_transaction_descriptions_valid PASSED
 test_transaction_descriptions.py::test_transaction_descriptions_empty_list PASSED
@@ -116,7 +119,28 @@ sort_by_date('not a list')
 ```
 sort_by_date([{"date": "2023-01-01"}], reverse="yes")
 ```
+## *Пример использования JSON-файла и конвертации валют:*
+### [Модуль 'utils'](https://write.geeksforgeeks.org/)
+```
+transactions = read_transactions_from_json('transactions.json')
 
+if transactions:
+    print(f"Найдено {len(transactions)} транзакций:")
+    for tx in transactions:
+        print(f"- {tx.get('date', 'нет даты')}: {tx.get('amount', 0)}")
+else:
+    print("Транзакции не найдены или файл поврежден")
+```
+### [Модуль 'external_api'](https://write.geeksforgeeks.org/)
+```
+transaction1 = {'amount': '100', 'currency': 'RUB'}
+transaction2 = {'amount': '50', 'currency': 'USD'}
+transaction3 = {'amount': '70', 'currency': 'EUR'}
+
+print(get_amount_in_rub(transaction1))  # 100.0
+print(get_amount_in_rub(transaction2))  # Конвертирует USD в RUB по текущему курсу
+print(get_amount_in_rub(transaction3))  # Конвертирует EUR в RUB по текущему курсу
+```
 ## *Документация:*
 Тестирование проводиться через команду 'Pytest' или 'python main.py'
 В процессе выполнения тестов, показана работа функций из модуля

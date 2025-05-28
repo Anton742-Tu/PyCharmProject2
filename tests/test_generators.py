@@ -41,7 +41,6 @@ def sample_transactions() -> List[Dict[str, Any]]:
         {"id": 1, "operationAmount": {"currency": {"code": "USD"}}},
         {"id": 2, "operationAmount": {"currency": {"code": "EUR"}}},
         {"id": 3, "operationAmount": {"currency": {"code": "USD", "name": "Доллар"}}},
-
         # Крайние случаи
         {"id": 4},  # Нет operationAmount
         {"id": 5, "operationAmount": None},  # operationAmount = None
@@ -51,22 +50,6 @@ def sample_transactions() -> List[Dict[str, Any]]:
         {"id": 9, "operationAmount": {"currency": "USD"}},  # currency как строка
         {"id": 10, "operationAmount": {"currency": {"code": 840}}},  # code как число
     ]
-
-
-@pytest.mark.parametrize("currency, expected_ids", [
-    ("USD", [1, 3]),  # Стандартные USD транзакции
-    ("EUR", [2]),  # Стандартные EUR транзакции
-    ("RUB", []),  # Нет RUB транзакций
-    ("GBP", []),  # Нет GBP транзакций
-])
-def test_standard_cases(
-        sample_transactions: List[Dict[str, Any]],
-        currency: str,
-        expected_ids: List[int]
-) -> None:
-    """Тестирование стандартных случаев фильтрации"""
-    result = list(filter_by_currency(sample_transactions, currency))
-    assert [tx["id"] for tx in result] == expected_ids
 
 
 def test_edge_cases(sample_transactions: List[Dict[str, Any]]) -> None:
@@ -91,9 +74,7 @@ def test_currency_case_sensitivity() -> None:
 
 def test_nested_transaction_structures() -> None:
     """Тестирование вложенных структур"""
-    transactions = [
-        {"data": {"operation": {"amount": {"currency": {"code": "USD"}}}}}
-    ]
+    transactions = [{"data": {"operation": {"amount": {"currency": {"code": "USD"}}}}}]
     # В зависимости от реализации функции
     result = list(filter_by_currency(transactions, "USD"))
     assert len(result) == 0  # или 1, если функция поддерживает глубокий поиск
