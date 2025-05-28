@@ -53,13 +53,13 @@ def read_transactions_from_json(file_path: str) -> List[Dict[str, Any]]:
             return data
 
     except FileNotFoundError as e:
-        utils_logger.error(f"Файл не найден: {file_path}")
+        utils_logger.error(f"Файл не найден: {file_path} {str(e)}")
         return []
     except json.JSONDecodeError as e:
         utils_logger.error(f"Ошибка декодирования JSON в файле {file_path}: {str(e)}")
         return []
     except Exception as e:
-        utils_logger.critical(f"Неожиданная ошибка при чтении {file_path}", exc_info=True)
+        utils_logger.critical(f"Неожиданная ошибка при чтении {file_path} {str(e)}", exc_info=True)
         return []
 
 

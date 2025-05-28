@@ -51,7 +51,7 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
         return masked_number
 
     except Exception as e:
-        logger.exception(f"Ошибка при маскировании номера карты: {str(card_number)}")
+        logger.exception(f"Ошибка при маскировании номера карты: {str(card_number)} {str(e)}")
         return "Ошибка при обработке номера карты"
 
 
@@ -77,5 +77,5 @@ def get_mask_account(account_number: Union[str, int]) -> str:
         return masked_number
 
     except Exception as e:
-        logger.exception(f"Ошибка при маскировании номера счета: {str(account_number)}")
+        logger.exception(f"Ошибка при маскировании номера счета: {str(account_number)} {str(e)}")
         return "Ошибка при обработке номера счета"
