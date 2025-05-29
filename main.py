@@ -4,7 +4,7 @@ from tests.test_processing import test_filter_by_state, test_sort_by_date
 from tests.test_main import test_mask_account_card, test_get_date
 from src.utils import read_transactions_from_json, write_transactions_to_json
 from typing import List, Dict, Any
-from src.finance_reader import read_financial_transactions, print_transactions
+
 
 # Примеры использования: 'masks', 'widget'
 if __name__ == "__main__":
@@ -41,17 +41,25 @@ if __name__ == "__main__":
 
 
 # Пример использования 'finance_reader'
-if __name__ == "__main__":
+from src.finance_reader import read_financial_transactions
+
+
+def main():
     try:
-        # Чтение из CSV
-        print("Чтение из CSV файла:")
-        csv_transactions = read_financial_transactions("transactions.csv")
-        print_transactions(csv_transactions[:3])  # Печать первых 3 операций
+        # Файлы автоматически ищутся в your_project/transactions/
+        csv_data = read_financial_transactions("transactions.csv")
+        xlsx_data = read_financial_transactions("transactions_excel.xlsx")
 
-        # Чтение из Excel
-        print("\nЧтение из XLSX файла:")
-        xlsx_transactions = read_financial_transactions("transactions.xlsx")
-        print_transactions(xlsx_transactions[:3])
+        # Пример вывода первых 3 записей
+        print("CSV данные:", csv_data[:3])
+        print("Excel данные:", xlsx_data[:3])
 
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"Ошибка: {e}")
+        print("Проверьте, что файлы лежат в папке transactions/")
+    except Exception as e:
+        print(f"Неизвестная ошибка: {e}")
+
+
+if __name__ == "__main__":
+    main()
