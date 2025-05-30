@@ -52,6 +52,21 @@ def sample_transactions() -> List[Dict[str, Any]]:
     ]
 
 
+@pytest.mark.parametrize(
+    "currency, expected_ids",
+    [
+        ("USD", [1, 3]),  # Стандартные USD транзакции
+        ("EUR", [2]),  # Стандартные EUR транзакции
+        ("RUB", []),  # Нет RUB транзакций
+        ("GBP", []),  # Нет GBP транзакций
+    ],
+)
+def test_standard_cases(sample_transactions: List[Dict[str, Any]], currency: str, expected_ids: List[int]) -> None:
+    """Тестирование стандартных случаев фильтрации"""
+    result = list(filter_by_currency(sample_transactions, currency))
+    assert [tx["id"] for tx in result] == expected_ids
+
+
 def test_edge_cases(sample_transactions: List[Dict[str, Any]]) -> None:
     """Тестирование крайних случаев"""
     # Все некорректные транзакции должны быть проигнорированы

@@ -38,3 +38,28 @@ if __name__ == "__main__":
     # Тест записи
     success: bool = write_transactions_to_json(transactions, "data/transactions_copy.json")
     print(f"Запись выполнена: {'успешно' if success else 'с ошибкой'}")
+
+
+# Пример использования 'finance_reader'
+from src.finance_reader import read_financial_transactions
+
+
+def main():
+    try:
+        # Файлы автоматически ищутся в your_project/transactions/
+        csv_data = read_financial_transactions("transactions.csv")
+        xlsx_data = read_financial_transactions("transactions_excel.xlsx")
+
+        # Пример вывода первых 3 записей
+        print("CSV данные:", csv_data[:3])
+        print("Excel данные:", xlsx_data[:3])
+
+    except FileNotFoundError as e:
+        print(f"Ошибка: {e}")
+        print("Проверьте, что файлы лежат в папке transactions/")
+    except Exception as e:
+        print(f"Неизвестная ошибка: {e}")
+
+
+if __name__ == "__main__":
+    main()
