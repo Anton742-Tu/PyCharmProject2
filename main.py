@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
 import os
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Callable, TypeVar, cast
+from typing import List, Dict, Any, TypeVar
 from src.masks import get_mask_card_number, get_mask_account
 from src.widget import mask_account_card, get_date
 from src.processing import filter_by_state, sort_by_date
@@ -50,8 +50,8 @@ from src.generators import filter_by_currency, transaction_descriptions, card_nu
 from src.finance_reader import get_transactions_path, read_financial_transactions
 from src.utils import read_transactions_from_json, write_transactions_to_json
 from src.external_api import get_amount_in_rub
-from src.transactions_utils import filter_transactions_by_description
-from src.transactions_stats import count_transactions_by_category
+from src.transaction_utils import filter_transactions_by_description
+from src.transaction_stats import count_transactions_by_category
 
 T = TypeVar("T")
 
