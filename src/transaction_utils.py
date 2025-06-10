@@ -2,7 +2,7 @@ import re
 from typing import List, Dict, Any
 
 
-def filter_transaction_by_description(transactions: List[Dict[str, Any]], search_query: str) -> List[Dict[str, Any]]:
+def filter_transactions_by_description(transactions: List[Dict[str, Any]], search_query: str) -> List[Dict[str, Any]]:
     """
     Фильтрует транзакции по строке поиска в описании
 
