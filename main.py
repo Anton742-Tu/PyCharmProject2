@@ -53,6 +53,8 @@ from src.external_api import get_amount_in_rub
 from src.transaction_utils import filter_transactions_by_description
 from src.transaction_stats import count_transactions_by_category
 
+from dulwich import file
+
 T = TypeVar("T")
 
 
@@ -140,8 +142,11 @@ def get_user_choice(prompt: str, valid_choices: List[str]) -> str:
 
 
 def get_full_path(file_type: str, filename: str) -> Path:
-    """Возвращает абсолютный путь к файлу"""
-    project_root = Path(__file__).parent.parent
+    """Возвращает абсолютный путь к файлу с учетом типа"""
+    # Получаем абсолютный путь к текущему рабочему каталогу
+    project_root = Path(os.getcwd())
+    print(f"Рабочая директория: {project_root}")  # Для отладки
+
     if file_type == "1":  # JSON
         return project_root / "data" / filename
     else:  # CSV или XLSX
@@ -161,6 +166,7 @@ def check_file(filepath: Path) -> bool:
 
 @log  # type: ignore
 def main() -> None:
+    print(f"Текущий рабочий каталог: {os.getcwd()}")
     print("Добро пожаловать в программу работы с банковскими транзакциями!")
     print("Выберите источник данных:")
     print("1. JSON-файл")
@@ -176,11 +182,15 @@ def main() -> None:
     )
 
     file_path = get_full_path(file_type, filename)
+    print(f"Пытаемся прочитать файл по пути: {file_path}")
 
-    if not check_file(file_path):
+    # Проверка существования файла
+    if not file_path.exists():
         print("\nПроверьте следующее:")
-        print(f"1. Файл должен находиться в папке {'data' if file_type == '1' else 'transactions'}")
-        print(f"2. Текущий рабочий каталог: {os.getcwd()}")
+        print(f"1. Файл должен находиться в: {file_path.parent}")
+        print(f"2. Имя файла должно быть: {file_path.name}")
+        print("Содержимое папки data:")
+        print(list((file_path.parent.parent / 'data').glob('*')))
         return
 
     transactions: List[Dict[str, Any]] = []
