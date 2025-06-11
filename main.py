@@ -1,33 +1,5 @@
-from src.masks import get_mask_card_number, get_mask_account
-from src.widget import mask_account_card, get_date
-from tests.test_processing import test_filter_by_state, test_sort_by_date
-from tests.test_main import test_mask_account_card, test_get_date
 from src.utils import read_transactions_from_json, write_transactions_to_json
 from typing import List, Dict, Any
-
-
-# Примеры использования: 'masks', 'widget'
-if __name__ == "__main__":
-    print("<<< Примеры использования функций >>>")
-    print(get_mask_card_number(1234565409877654))
-    print(get_mask_account(3456))
-    print(mask_account_card("American Express 123456789087543"))
-    print(get_date("2024-03-11T02:26:18.671407"))
-
-
-# Запуск тестов 'widget'
-if __name__ == "__main__":
-    test_mask_account_card()
-    test_get_date()
-    print("- Тесты модуля 'widget.py'\n Прошли успешно!")
-
-
-# Запуск тестов 'processing'
-if __name__ == "__main__":
-    test_filter_by_state()
-    test_sort_by_date()
-    print("- Тесты модуля 'processing.py'\n Прошли успешно!")
-
 
 # Пример использования 'utils'
 if __name__ == "__main__":
@@ -39,21 +11,21 @@ if __name__ == "__main__":
     success: bool = write_transactions_to_json(transactions, "data/transactions_copy.json")
     print(f"Запись выполнена: {'успешно' if success else 'с ошибкой'}")
 
+
 import os
 from pathlib import Path
 from typing import List, Dict, Any, TypeVar
 from src.masks import get_mask_card_number, get_mask_account
-from src.widget import mask_account_card, get_date
+from src.widget import get_date
 from src.processing import filter_by_state, sort_by_date
 from src.decorators import log, write_log
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
-from src.finance_reader import get_transactions_path, read_financial_transactions
+from src.finance_reader import read_financial_transactions
 from src.utils import read_transactions_from_json, write_transactions_to_json
 from src.external_api import get_amount_in_rub
 from src.transaction_utils import filter_transactions_by_description
 from src.transaction_stats import count_transactions_by_category
 
-from dulwich import file
 
 T = TypeVar("T")
 
@@ -126,9 +98,8 @@ def show_category_stats(transactions: List[Dict[str, Any]]) -> None:
         print("\nВ транзакциях отсутствует информация о категориях")
 
 
-@log  # type: ignore
 def write_operation_log(message: str) -> None:
-    """Демонстрация работы логгера"""
+    """Логирование операций"""
     write_log(f"Лог операции: {message}")
 
 
@@ -165,7 +136,7 @@ def check_file(filepath: Path) -> bool:
 
 
 @log  # type: ignore
-def main() -> None:
+def main(*args: str) -> None:
     print(f"Текущий рабочий каталог: {os.getcwd()}")
     print("Добро пожаловать в программу работы с банковскими транзакциями!")
     print("Выберите источник данных:")
@@ -258,6 +229,10 @@ def main() -> None:
                 print(f"Данные сохранены в {output_file}")
             except Exception as e:
                 print(f"Ошибка при сохранении: {e}")
+                write_operation_log("Программа успешно завершила работу")
+            except Exception as e:
+                write_operation_log(f"Ошибка выполнения: {str(e)}")
+                raise
 
 
 if __name__ == "__main__":

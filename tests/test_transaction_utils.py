@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 import unittest
-from src.transaction_utils import filter_transaction_by_description
+from src.transaction_utils import filter_transactions_by_description
 
 
 class TestFilterTransaction(unittest. TestCase):
@@ -10,7 +10,7 @@ class TestFilterTransaction(unittest. TestCase):
         ]
 
     def test_basic_search(self) -> None:
-        result = filter_transaction_by_description(
+        result = filter_transactions_by_description(
             self.sample_transactions,
             "магазин"
         )
