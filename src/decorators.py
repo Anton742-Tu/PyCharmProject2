@@ -22,7 +22,7 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable
             try:
                 result: T = _func(*args, **kwargs)
                 log_entry: str = f"{call_info}Returned: {result}\n{'-' * 40}"
-                _write_log(log_entry, filename)
+                write_log(log_entry, filename)
                 return result
 
             except Exception as e:
@@ -32,7 +32,7 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable
                     f"Traceback:\n{traceback.format_exc()}"
                     f"{'-' * 40}"
                 )
-                _write_log(error_entry, filename)
+                write_log(error_entry, filename)
                 raise  # Повторно поднимаем исключение
 
         return wrapper
@@ -46,7 +46,7 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., T]], Callable
     return decorator
 
 
-def _write_log(message: str, filename: Optional[str] = None) -> None:
+def write_log(message: str, filename: Optional[str] = None) -> None:
     """Вспомогательная функция для записи лога."""
     print(message)  # Всегда выводим в консоль
 
